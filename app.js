@@ -5,7 +5,7 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var Costume = require("./models/costume");
 var resourceRouter = require("./routes/resource");
-var costumesRouter = require('./routes/costumes');
+var costumesRouter = require('./routes/costume');
 
 require("dotenv").config();
 const mongoose = require("mongoose");
