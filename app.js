@@ -6,6 +6,10 @@ var logger = require("morgan");
 var Costume = require("./models/costume");
 var resourceRouter = require("./routes/resource");
 var costumesRouter = require('./routes/costume');
+var session = require('express-session');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
 
 require("dotenv").config();
 const mongoose = require("mongoose");
@@ -23,6 +27,7 @@ db.once("open", function () {
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+var Account = require("./models/account");
 
 var app = express();
 
@@ -34,12 +39,25 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/resource", resourceRouter);
 app.use('/costumes', costumesRouter);
+
+passport.use(new LocalStrategy(Account.authenticate()));
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -2,6 +2,16 @@ extends layout
 
 block content
   h1= title
-  ul
-    each item in results
-      li #{item.costume_type} - #{item.size} - #{item.cost}
+  - let items = results
+  div(class="container-fluid")
+    div(class="row m-1")
+      each item in items
+        - let destination = `/costumes/update?id=${item._id}`
+        div(class="row-sm-2 m-1")
+          | Item #{item.costume_type}(#{item.size}) is #{item.cost}
+          button.btn.btn-primary.ml-1(onclick=`dispatch('${destination}')`) Update
+
+  script.
+    function dispatch(path){
+      window.location.href = path
+    }
