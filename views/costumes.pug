@@ -2,16 +2,28 @@ extends layout
 
 block content
   h1= title
-  - let items = results
+
   div(class="container-fluid")
+    div(class="row m-2")
+      button.btn.btn-success(onclick="createCostume()") Create New Costume
+
     div(class="row m-1")
-      each item in items
-        - let destination = `/costumes/update?id=${item._id}`
-        div(class="row-sm-2 m-1")
-          | Item #{item.costume_type}(#{item.size}) is #{item.cost}
-          button.btn.btn-primary.ml-1(onclick=`dispatch('${destination}')`) Update
+      each item in results
+        - let detailLink = `/costumes/detail?id=${item._id}`
+        - let updateLink = `/costumes/update?id=${item._id}`
+        - let deleteLink = `/costumes/delete?id=${item._id}`
+
+        div(class="row-sm-2 m-2 p-2 border")
+          div Item #{item.costume_type} (#{item.size}) is #{item.cost}
+          button.btn.btn-info.m-1(onclick=`goTo('${detailLink}')`) Detail
+          button.btn.btn-primary.m-1(onclick=`goTo('${updateLink}')`) Update
+          button.btn.btn-danger.m-1(onclick=`goTo('${deleteLink}')`) Delete
 
   script.
-    function dispatch(path){
-      window.location.href = path
+    function goTo(path) {
+      window.location.href = path;
+    }
+
+    function createCostume() {
+      window.location.href = '/costumes/create';
     }
